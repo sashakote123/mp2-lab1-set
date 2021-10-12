@@ -49,8 +49,8 @@ int TBitField::GetBit(const int n) const // получить значение б
 // битовые операции
 
 TBitField& TBitField::operator=(const TBitField& bf) { // присваивание
-	//MemLen = bf.MemLen;
-	//BitLen = bf.BitLen;
+	MemLen = bf.MemLen;
+	BitLen = bf.BitLen;
 
 	TBitField tmp(bf);
 	swap(pMem, tmp.pMem);
