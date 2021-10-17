@@ -5,10 +5,13 @@ using namespace std;
 
 
 TBitField::TBitField(int len):BitLen(len) {
-	if (len <= 0) 
+	if (len < 0) 
 		throw exception();
 	else {
-		MemLen = len / (sizeof(uint) * 8);
+		if (len % (sizeof(uint) * 8) == 0)
+			MemLen = len / (sizeof(uint) * 8);
+		if (len % (sizeof(uint) * 8) != 0)
+			MemLen++;
 		pMem = new uint[MemLen];
 		for (size_t i = 0; i < MemLen; i++)
 			pMem[i] = 0;
@@ -27,13 +30,13 @@ TBitField::~TBitField() {
 }
 
 int TBitField::GetMemIndex(const int n) const { // индекс Мем для бита n
-	if (n <= 0 || n > BitLen)
+	if (n < 0 || n >= BitLen)
 		throw exception();
-	return n / (sizeof(uint) * 8);
+	return (n / (sizeof(uint) * 8));
 }
 
 uint TBitField::GetMemMask(const int n) const { // битовая маска для бита n
-	if (n < 0)
+	if (n < 0 || n>BitLen)
 		throw exception();
 	return (1 << (n % (sizeof(uint) * 8)));
 }
@@ -45,38 +48,45 @@ int TBitField::GetLength(void) const { // получить длину (к-во �
 }
 
 void TBitField::SetBit(const int n) { // установить бит
-	if (n < 0)
+	if (n < 0 || n >= BitLen)
 		throw exception();
-	pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] | GetMemMask(n);
+		pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] | GetMemMask(n);
 }
 
 void TBitField::ClrBit(const int n) { // очистить бит
-	if (n < 0)
+	if (n < 0 || n >= BitLen)
 		throw exception();
-	pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] & ~GetMemMask(n);
+		pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] & ~GetMemMask(n);
 }
 
 int TBitField::GetBit(const int n) const{ // получить значение бита
-	if (n < 0)
+	if (n < 0 || n >= BitLen)
 		throw exception();
-	return pMem[GetMemIndex(n)] & GetMemMask(n);
+	return pMem[GetMemIndex(n)] & GetMemMask(n) != 0;
 }
 
 // битовые операции
 
 TBitField& TBitField::operator=(const TBitField& bf) { // присваивание
+
+	if (this == &bf)
+		return *this;
+
+	uint* pMem2 = new uint[bf.MemLen];
+	delete[] pMem;
+	pMem = pMem2;
+
 	MemLen = bf.MemLen;
 	BitLen = bf.BitLen;
 
-	TBitField tmp(bf);
-	swap(tmp.pMem, pMem);
-
+	for (size_t i = 0; i < MemLen; i++)
+		pMem[i] = bf.pMem[i];
+	
 	return *this;
-
 }
 
 int TBitField::operator==(const TBitField& bf) const { // сравнение
-	if (BitLen != bf.BitLen)
+	if (bf.BitLen != BitLen)
 		return 0;
 	for (size_t i = 0; i < MemLen; i++) {
 		if (pMem[i] != bf.pMem[i])
