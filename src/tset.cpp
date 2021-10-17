@@ -49,6 +49,8 @@ void TSet::DelElem(const int Elem){ // исключение элемента м�
 // теоретико-множественные операции
 
 TSet& TSet::operator=(const TSet &s){ // присваивание
+    if (&s == this)
+        return *this;
     BitField = s.BitField;
     MaxPower = s.MaxPower;
     return *this;
@@ -58,14 +60,11 @@ int TSet::operator==(const TSet &s) const{ // сравнение
     if (BitField != s.BitField)
         return 0;
     else
-        return 1;
+        return (BitField == s.BitField);
 }
 
 int TSet::operator!=(const TSet &s) const{ // сравнение
-    if (BitField != s.BitField)
-        return 1;
-    else
-        return 0;
+    return !(*this == s);
 }
 
 TSet TSet::operator+(const TSet &s){ // объединение
