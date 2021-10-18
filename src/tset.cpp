@@ -35,9 +35,9 @@ int TSet::GetMaxPower(void) const{ // получить макс. к-во эл-т
 
 int TSet::IsMember(const int Elem) const{ // элемент множества?
     if (BitField.GetBit(Elem))
-        return 1;
+        return true;
     else
-        return 0;
+        return false;
 }
 
 void TSet::InsElem(const int Elem){ // включение элемента множества
@@ -87,7 +87,7 @@ TSet TSet::operator-(const int Elem){ // разность с элементом
 }
 
 TSet TSet::operator*(const TSet &s){ // пересечение
-    TSet tmp((*this).BitField & BitField);
+    TSet tmp(BitField & s.BitField);
     return tmp;
 }
 

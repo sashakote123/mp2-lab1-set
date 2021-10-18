@@ -16,7 +16,7 @@ TEST(TSet, can_insert_non_existing_element)
   TSet set(size);
   set.InsElem(k);
 
-  EXPECT_NE(set.IsMember(k), 0);
+  EXPECT_EQ(set.IsMember(k), 0);
 }
 
 TEST(TSet, can_insert_existing_element)
@@ -27,7 +27,7 @@ TEST(TSet, can_insert_existing_element)
   set.InsElem(k);
   set.InsElem(k);
 
-  EXPECT_NE(set.IsMember(k), 0);
+  EXPECT_EQ(set.IsMember(k), 0);
 }
 
 TEST(TSet, can_delete_non_existing_element)
@@ -36,7 +36,7 @@ TEST(TSet, can_delete_non_existing_element)
   TSet set(size);
   set.DelElem(k);
 
-  EXPECT_EQ(set.IsMember(k), 0);
+  EXPECT_EQ(0, set.IsMember(k));
 }
 
 TEST(TSet, can_delete_existing_element)

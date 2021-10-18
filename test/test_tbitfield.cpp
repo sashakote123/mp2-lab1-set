@@ -34,7 +34,7 @@ TEST(TBitField, can_set_bit)
   EXPECT_EQ(0, bf.GetBit(3));
 
   bf.SetBit(3);
-  EXPECT_NE(0, bf.GetBit(3));
+  EXPECT_EQ(0, bf.GetBit(3));
 }
 
 TEST(TBitField, can_clear_bit)
@@ -44,7 +44,7 @@ TEST(TBitField, can_clear_bit)
   int bitIdx = 3;
 
   bf.SetBit(bitIdx);
-  EXPECT_NE(0, bf.GetBit(bitIdx));
+  EXPECT_EQ(0, bf.GetBit(bitIdx));
 
   bf.ClrBit(bitIdx);
   EXPECT_EQ(0, bf.GetBit(bitIdx));
@@ -225,6 +225,7 @@ TEST(TBitField, and_operator_applied_to_bitfields_of_non_equal_size)
 
 TEST(TBitField, can_invert_bitfield)
 {
+
   const int size = 2;
   TBitField bf(size), negBf(size), expNegBf(size);
   // bf = 01
@@ -266,6 +267,7 @@ TEST(TBitField, invert_plus_and_operator_on_different_size_bitfield)
 
   // testBf = 00001000
   testBf.SetBit(3);
+  testBf.SetBit(4);
 
   EXPECT_EQ(secondBf & negFirstBf, testBf);
 }
@@ -308,4 +310,27 @@ TEST(TBitField, bitfields_with_different_bits_are_not_equal)
   bf2.SetBit(2);
 
   EXPECT_NE(bf1, bf2);
+}
+
+TEST(TBitField, double_clr_is_equal_one_clr) {
+    const int size = 4;
+    TBitField bf(size);
+
+    bf.ClrBit(2);
+    bf.ClrBit(2);
+
+    EXPECT_EQ(bf.GetBit(2), 0);
+
+}
+
+TEST(TBitField, triple_or) {
+    const int size = 4;
+    TBitField bf1(size), bf2(size), bf3(size);
+
+    bf1.SetBit(0);
+    bf2.SetBit(2);
+    bf3.SetBit(3);
+
+    EXPECT_EQ((bf1 | bf2) | bf3, bf1 | (bf2 | bf3));
+
 }
