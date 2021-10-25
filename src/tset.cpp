@@ -104,7 +104,14 @@ istream &operator>>(istream &istr, TSet &s){ // ввод
 }
 
 ostream& operator<<(ostream &ostr, const TSet &s){ // вывод
-    ostr << s.BitField;
+    int el = s.GetMaxPower() - 1;
+    while (!s.IsMember(el))  
+       el--;  
+    for (int i = 0; i < el; i++) 
+        if (s.IsMember(i))        
+            ostr << i;    
+    
+    ostr <<el << endl;
     return ostr;
 }
 
