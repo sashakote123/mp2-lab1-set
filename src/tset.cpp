@@ -99,7 +99,11 @@ TSet TSet::operator~(void){ // дополнение
 // перегрузка ввода/вывода
 
 istream &operator>>(istream &istr, TSet &s){ // ввод
-    istr>>s.BitField;
+    int elem;
+    while (cin.peek() != '\n') {
+        istr >> elem;
+        s.InsElem(elem);
+    }
     return istr;
 }
 
@@ -109,7 +113,7 @@ ostream& operator<<(ostream &ostr, const TSet &s){ // вывод
        el--;  
     for (int i = 0; i < el; i++) 
         if (s.IsMember(i))        
-            ostr << i;    
+            ostr << i << " ";
     
     ostr <<el << endl;
     return ostr;
